@@ -1,0 +1,17 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Configurações locais de IDEs
+.vscode/
+.idea/
+
+# Arquivos temporários
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Cache do Python (caso use algum script auxiliar)
+__pycache__/
