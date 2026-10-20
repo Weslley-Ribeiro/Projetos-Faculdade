@@ -1,514 +1,163 @@
-# Frameworks — atividades práticas 1 a 4
+# Frameworks para Desenvolvimento de Software — atividades 1 a 4
 
-> Registro de apoio para organizar posteriormente a documentação do portfólio. Os códigos abaixo reúnem os exemplos preparados durante a assistência; confira-os com os arquivos locais antes de apresentá-los como cópia exata dos projetos executados.
+Registro técnico das práticas acadêmicas e da revisão do relatório em 20/10/2026. O nome histórico do arquivo foi mantido para preservar seu endereço.
 
-## Atividade 1 — configuração Tomcat e teste
+## Códigos completos preservados
 
-### Objetivo e momento
+[Consultar todos os códigos e suas explicações na versão consolidada das quatro atividades](https://github.com/Weslley-Ribeiro/Projetos-Faculdade/blob/325449e9bfd827b66229578bf414896757dbb03e/Frameworks/ATIVIDADES-1-3-CODIGOS.md).
 
-A etapa consistiu em preparar o ambiente Java Web no NetBeans e configurar o servidor Apache Tomcat para executar uma aplicação web de teste. O roteiro de aula menciona Tomcat 8, que não estava disponível no ambiente atual do aluno; foi usado Tomcat 9.0.122 com NetBeans 23. O projeto cadastrado depois para as atividades Spring utiliza o caminho padrão do Spring Web MVC criado pelo NetBeans.
+Esse link aponta para um commit específico, preservando os blocos completos de HTML, JSP e JavaScript anteriores a esta reorganização. Esta atualização transforma a página atual em um registro de procedimentos, resultados e revisão, sem apagar os códigos do histórico.
 
-### Observação sobre o código
+Atenção: o código da Atividade 2 no registro anterior é um exemplo consolidado, não uma transcrição verificada dos arquivos locais executados. O CSS original dessa atividade não foi recuperado. Os códigos das demais atividades também devem ser comparados com os projetos locais antes de serem apresentados como cópia integral.
 
-Não há, no registro desta assistência, um bloco completo de código-fonte da página de teste da Atividade 1. Por isso, não se reproduz aqui código como se fosse o arquivo original. Para documentar a cópia efetivamente executada, adicionar posteriormente o arquivo da página de teste e os passos de configuração do servidor, conforme estiverem no projeto local.
+## Ambiente utilizado e adaptações
 
-## Atividade 2 — formulário de endereço e ViaCEP
+- IDE: Apache NetBeans 23.
+- Servidor Java Web: Apache Tomcat 9.0.122.
+- Framework: Spring Framework 5.3.31 / Spring Web MVC.
+- Interface das Atividades 3 e 4: Bootstrap 5.3.8 via CDN.
+- Biblioteca da Atividade 4: jQuery 3.7.1 via CDN.
+- Endereços: ViaCEP, com respostas JSON.
+- Java JDK instalado no ambiente: a versão exata deve ser confirmada nas configurações locais.
 
-### Objetivo e momento
+O roteiro citava Tomcat 8.x, que não foi obtido no fluxo utilizado durante a prática. Foi adotado Tomcat 9.0.122, preservando a base Servlet/JSP javax utilizada pela estrutura Spring 5.3. Isso não significa que não existam versões históricas do Tomcat 8.
 
-Formulário front-end em HTML5, estilizado com Bootstrap 5, destinado a consultar CEP e preencher rua, bairro, cidade e estado por meio do serviço ViaCEP. Os trechos representam a implementação preparada para essa atividade; comparar com os arquivos locais `index.html`, `style.css` e `controller.js` antes de publicação como versão final.
+O Spring 5.3.31 é superior à versão mínima 4.3.29 indicada no roteiro. Bootstrap 5.3.8 e jQuery 3.7.1 substituíram as versões exemplificadas no material (5.0.2 e 1.7.1). As versões acima registram o ambiente do exercício; não representam recomendação de versões mais recentes ou de suporte para produção.
 
-### `index.html`
+A antiga extensão NetBeans Connector para Chrome não estava disponível no ambiente utilizado. Os projetos HTML foram abertos diretamente no navegador. A aplicação Spring da Atividade 3 foi executada no Tomcat. ViaCEP é o serviço consumido, e não uma API própria dos Correios.
 
-Usado na criação da estrutura da página, dos campos de endereço, do botão de consulta e das referências ao CSS e JavaScript.
+## Atividade 1 — configuração e aplicação de teste
 
-```html
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Endereço</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body class="bg-light">
-    <main class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-                        <h1 class="h3 text-center mb-4">Cadastro de Endereço</h1>
-                        <form id="formEndereco">
-                            <div class="mb-3">
-                                <label for="cep" class="form-label">CEP</label>
-                                <input type="text" class="form-control" id="cep" name="cep" maxlength="9" placeholder="00000-000" required>
-                                <div class="form-text">Digite o CEP para consultar o endereço.</div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rua" class="form-label">Rua</label>
-                                <input type="text" class="form-control" id="rua" name="rua" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bairro" class="form-label">Bairro</label>
-                                <input type="text" class="form-control" id="bairro" name="bairro" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="cidade" class="form-label">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado</label>
-                                <input type="text" class="form-control" id="estado" name="estado" maxlength="2" required>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="numero" class="form-label">Número</label>
-                                    <input type="text" class="form-control" id="numero" name="numero">
-                                </div>
-                                <div class="col-md-8 mb-3">
-                                    <label for="complemento" class="form-label">Complemento</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento">
-                                </div>
-                            </div>
-                            <div id="mensagem" class="small mb-3" aria-live="polite"></div>
-                            <button type="button" id="btnConsultar" class="btn btn-primary w-100">Consultar CEP</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <script src="controller.js"></script>
-</body>
-</html>
-```
+Primeiro foi selecionado um projeto Java Web com Ant, associado ao Tomcat e criado com Spring Web MVC. O projeto de teste recebeu o nome WebApplication1. A estrutura gerada incluiu WEB-INF/jsp/index.jsp, applicationContext.xml, dispatcher-servlet.xml, web.xml e redirect.jsp.
 
-### `controller.js`
+A captura do redirect.jsp dessa etapa mostra `response.sendRedirect("index.jsp");`. O resultado foi registrado em `http://localhost:8080/WebApplication1/index.jsp`, com a mensagem “Aplicação funcionando com Tomcat”. O código completo dessa página não foi recuperado. Não se apresenta uma reconstrução como se fosse o original.
 
-Usado para validar o CEP, consultar o endpoint ViaCEP, preencher automaticamente os campos de endereço, informar carregamento e apresentar mensagens para CEP inválido, não encontrado ou falha de rede.
+O teste demonstrou a entrega da página pelo Tomcat. Uma URL JSP direta não comprova, sozinha, passagem por um controlador Spring. Essa configuração histórica não deve substituir o fluxo index.htm da Atividade 3.
 
-```javascript
-const campoCep = document.getElementById("cep");
-const campoRua = document.getElementById("rua");
-const campoBairro = document.getElementById("bairro");
-const campoCidade = document.getElementById("cidade");
-const campoEstado = document.getElementById("estado");
-const mensagem = document.getElementById("mensagem");
-const botaoConsultar = document.getElementById("btnConsultar");
+## Atividade 2 — formulário de endereço
 
-function limparEndereco() {
-    campoRua.value = "";
-    campoBairro.value = "";
-    campoCidade.value = "";
-    campoEstado.value = "";
-}
+Foi criado um projeto HTML5/JavaScript para trabalhar com CEP, rua, bairro, cidade, estado, número e complemento.
 
-async function consultarCep() {
-    const cep = campoCep.value.replace(/\D/g, "");
-    mensagem.textContent = "";
-    mensagem.className = "small mb-3";
+- index.html: estrutura da página e campos de endereço.
+- style.css: estilos adicionais; arquivo original pendente de recuperação.
+- controller.js: lógica de consulta e atualização dos campos.
 
-    if (cep.length !== 8) {
-        limparEndereco();
-        mensagem.textContent = "Informe um CEP válido com 8 números.";
-        mensagem.classList.add("text-danger");
-        campoCep.focus();
-        return;
-    }
-
-    botaoConsultar.disabled = true;
-    mensagem.textContent = "Consultando CEP...";
-    mensagem.classList.add("text-secondary");
-
-    try {
-        const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-        if (!resposta.ok) throw new Error("Falha na consulta");
-
-        const endereco = await resposta.json();
-        if (endereco.erro) {
-            limparEndereco();
-            mensagem.textContent = "CEP não encontrado.";
-            mensagem.className = "small mb-3 text-danger";
-            return;
-        }
-
-        campoRua.value = endereco.logradouro || "";
-        campoBairro.value = endereco.bairro || "";
-        campoCidade.value = endereco.localidade || "";
-        campoEstado.value = endereco.uf || "";
-        mensagem.textContent = "Endereço preenchido com sucesso.";
-        mensagem.className = "small mb-3 text-success";
-    } catch (erro) {
-        limparEndereco();
-        mensagem.textContent = "Não foi possível consultar o CEP. Verifique a conexão e tente novamente.";
-        mensagem.className = "small mb-3 text-danger";
-    } finally {
-        botaoConsultar.disabled = false;
-    }
-}
-
-botaoConsultar.addEventListener("click", consultarCep);
-campoCep.addEventListener("keydown", (evento) => {
-    if (evento.key === "Enter") {
-        evento.preventDefault();
-        consultarCep();
-    }
-});
-```
+O exemplo completo preservado no link de códigos usa Fetch para consultar `https://viacep.com.br/ws/{cep}/json/`, valida o comprimento de oito dígitos e trata CEP não encontrado e falha de consulta. A consulta preenche logradouro, bairro, localidade e UF nos campos correspondentes. O relatório documentou tela inicial, consulta válida e tratamento de erro.
 
 ## Atividade 3 — formulário Spring MVC e Bootstrap
 
-### Objetivo e momento
+Foi criado o projeto cadastroUsuario, com Tomcat e Spring Web MVC. O formulário foi implementado em WEB-INF/jsp/index.jsp e estilizado com Bootstrap.
 
-A view JSP foi substituída pela página de formulário dentro de `WEB-INF/jsp/index.jsp`. O projeto executado no NetBeans exibiu a tela pelo endereço local `/cadastroUsuario/index.htm`. O mapeamento Spring observado foi `index.htm` → `indexController`; o nome de view `index` foi resolvido pelo prefixo `/WEB-INF/jsp/` e sufixo `.jsp`.
+### Relação entre código, execução e resultado
 
-O formulário é uma demonstração visual: não persiste dados nem implementa processamento do envio. O botão e o atributo `action="#"` não devem ser descritos como funcionalidade de gravação.
+1. O acesso inicial à aplicação utiliza redirect.jsp, que redireciona para index.htm.
+2. No dispatcher-servlet.xml, index.htm está associado a indexController.
+3. O controlador utiliza o nome lógico de view index.
+4. O InternalResourceViewResolver combina o prefixo /WEB-INF/jsp/ com o nome index e o sufixo .jsp.
+5. O arquivo /WEB-INF/jsp/index.jsp é apresentado no navegador.
 
-### `WEB-INF/jsp/index.jsp`
+Endereço verificado: `http://localhost:8080/cadastroUsuario/index.htm`.
 
-Inserido na implementação do formulário de cadastro e na aplicação das classes de layout e formulário do Bootstrap 5.
+O JSP completo está no link permanente dos códigos. Classes container, row, col-md-*, card, form-label e form-control organizam a interface.
 
-```jsp
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Cadastro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-</head>
-<body class="bg-light">
-    <main class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-8">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4">
-                        <h1 class="h3 text-center mb-4">Formulário de Cadastro</h1>
-                        <form action="#" method="post">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nome" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="nome" name="nome" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="sobrenome" class="form-label">Sobrenome</label>
-                                    <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">E-mail</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="senha" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="senha" name="senha" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="cep" class="form-label">CEP</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" required>
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="rua" class="form-label">Rua</label>
-                                    <input type="text" class="form-control" id="rua" name="rua" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="bairro" class="form-label">Bairro</label>
-                                    <input type="text" class="form-control" id="bairro" name="bairro" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cidade" class="form-label">Cidade</label>
-                                    <input type="text" class="form-control" id="cidade" name="cidade" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="estado" class="form-label">Estado</label>
-                                    <input type="text" class="form-control" id="estado" name="estado" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="numero" class="form-label">Número</label>
-                                    <input type="text" class="form-control" id="numero" name="numero" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="complemento" class="form-label">Complemento</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento">
-                                </div>
-                                <div class="col-12 d-grid mt-4">
-                                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-</body>
-</html>
-```
+Os 11 campos são: Nome, Sobrenome, E-mail, Senha, CEP, Rua, Bairro, Cidade, Estado, Número e Complemento. O formulário exibido no navegador apresenta esses campos e o botão Cadastrar.
 
-## Atividade 4 — cadastro de usuário com jQuery e ViaCEP
+### Revisão de 20/10/2026
 
-### Objetivo e momento
+O retorno da avaliação solicitou evidências mais claras do formulário e melhor conexão entre procedimentos e resultados. Foram realizadas as seguintes melhorias:
 
-A atividade foi implementada em um projeto HTML5/JavaScript chamado `cadUsuario`, sem template e sem ferramentas adicionais de automação. O objetivo foi construir um formulário de cadastro de usuário usando Bootstrap 5 para o layout, jQuery para manipulação e validação dos campos e ViaCEP para preenchimento automático de endereço.
+- Figura 20 refeita: captura do código mostrando os 11 campos e o botão.
+- Figura 21 refeita: captura do navegador com URL do projeto, título, todos os campos e botão.
+- Texto ampliado para explicar o caminho JSP → Spring MVC → Tomcat → interface apresentada.
+- Resultado descrito explicitamente, com a disposição das linhas e a aplicação do CSS Bootstrap.
+- Relatório atualizado para 31 páginas físicas, com Figura 20 na página numerada 19, Figura 21 na página numerada 20 e sumário atualizado.
 
-O código foi separado por responsabilidade: `index.html` contém a interface e as referências aos CDNs; `main.js` consulta a API; `validation.js` valida os dados antes de permitir a finalização simulada do cadastro.
+Esta revisão foi documental: não houve nova funcionalidade implementada. O PDF revisado foi preparado; reenvio e nova avaliação ainda não foram confirmados neste registro.
 
-### `index.html`
+Não há persistência, processamento do cadastro no servidor ou consulta de CEP nesta atividade. O `action="#"` e o método POST não equivalem a gravação de dados.
 
-Usado para criar os 11 campos do formulário, carregar Bootstrap 5.3.8, jQuery 3.7.1 e os dois scripts locais. O atributo `novalidate` permite que a interface utilize o feedback visual controlado por jQuery e pelas classes do Bootstrap.
+## Atividade 4 — formulário com jQuery e ViaCEP
 
-```html
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuário</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-</head>
-<body class="bg-light">
-    <main class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-9">
-                <div class="card shadow-sm">
-                    <div class="card-body p-4 p-md-5">
-                        <h1 class="h3 text-center mb-4">Cadastro de Usuário</h1>
-                        <form id="formCadastro" novalidate>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nome" class="form-label">Nome</label>
-                                    <input type="text" class="form-control" id="nome" name="nome" required>
-                                    <div class="invalid-feedback">Informe o nome.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="sobrenome" class="form-label">Sobrenome</label>
-                                    <input type="text" class="form-control" id="sobrenome" name="sobrenome" required>
-                                    <div class="invalid-feedback">Informe o sobrenome.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">E-mail</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                    <div class="invalid-feedback">Informe um e-mail válido.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="senha" class="form-label">Senha</label>
-                                    <input type="password" class="form-control" id="senha" name="senha" minlength="6" required>
-                                    <div class="invalid-feedback">A senha deve ter pelo menos 6 caracteres.</div>
-                                </div>
-                                <div class="col-12"><hr class="my-2"><h2 class="h5 mt-3">Endereço</h2></div>
-                                <div class="col-md-4">
-                                    <label for="cep" class="form-label">CEP</label>
-                                    <input type="text" class="form-control" id="cep" name="cep" maxlength="9" placeholder="00000-000" required>
-                                    <div class="invalid-feedback">Informe um CEP válido.</div>
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="rua" class="form-label">Rua</label>
-                                    <input type="text" class="form-control" id="rua" name="rua" required>
-                                    <div class="invalid-feedback">Informe a rua.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="bairro" class="form-label">Bairro</label>
-                                    <input type="text" class="form-control" id="bairro" name="bairro" required>
-                                    <div class="invalid-feedback">Informe o bairro.</div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cidade" class="form-label">Cidade</label>
-                                    <input type="text" class="form-control" id="cidade" name="cidade" required>
-                                    <div class="invalid-feedback">Informe a cidade.</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="estado" class="form-label">Estado</label>
-                                    <input type="text" class="form-control" id="estado" name="estado" maxlength="2" placeholder="UF" required>
-                                    <div class="invalid-feedback">Informe o estado.</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="numero" class="form-label">Número</label>
-                                    <input type="text" class="form-control" id="numero" name="numero" required>
-                                    <div class="invalid-feedback">Informe o número.</div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="complemento" class="form-label">Complemento</label>
-                                    <input type="text" class="form-control" id="complemento" name="complemento">
-                                </div>
-                                <div class="col-12"><div id="mensagemCep" class="small" aria-live="polite"></div></div>
-                                <div class="col-12 d-grid mt-2"><button type="submit" class="btn btn-primary">Cadastrar</button></div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <script src="main.js"></script>
-    <script src="validation.js"></script>
-</body>
-</html>
-```
+Foi criado o projeto HTML5/JavaScript cadUsuario, sem template e sem ferramentas opcionais de automação.
 
-### `main.js`
+- index.html: interface, Bootstrap e jQuery, além do carregamento dos scripts locais.
+- main.js: máscara simples de CEP e consulta com $.getJSON quando o campo perde o foco (blur).
+- validation.js: campos obrigatórios, formato básico de e-mail por expressão regular e senha mínima de seis caracteres.
 
-Usado para formatar o CEP e consultar o ViaCEP quando o usuário sai do campo. A resposta preenche rua, bairro, cidade e estado; também há mensagens para CEP inválido, não encontrado ou falha de consulta.
+O atributo novalidate desativa a validação interativa padrão do navegador para a demonstração das regras JavaScript. As classes is-valid e is-invalid controlam o retorno visual do Bootstrap. Complemento é opcional na implementação. O evento de envio utiliza preventDefault; quando as regras são atendidas, exibe “Cadastro validado com sucesso!” e limpa o formulário.
 
-```javascript
-$(document).ready(function () {
-    const campoCep = $("#cep");
-    const mensagemCep = $("#mensagemCep");
+Os três arquivos completos estão no link permanente dos códigos.
 
-    function limparEndereco() {
-        $("#rua").val("");
-        $("#bairro").val("");
-        $("#cidade").val("");
-        $("#estado").val("");
-    }
+### Resultados documentados
 
-    function exibirMensagem(texto, classe) {
-        mensagemCep
-            .removeClass("text-danger text-success text-secondary")
-            .addClass(classe)
-            .text(texto);
-    }
+- Formulário inicial estilizado: Figura 25.
+- Campos obrigatórios: Figura 26 do relatório.
+- Consulta do CEP 01001-000: Praça da Sé, Sé, São Paulo, SP; Figura 27.
+- Alerta de validação bem-sucedida: Figura 28.
 
-    function consultarCep() {
-        const cep = campoCep.val().replace(/\D/g, "");
-        mensagemCep.text("");
+### Limitações dos exemplos
 
-        if (cep.length !== 8) {
-            limparEndereco();
-            campoCep.addClass("is-invalid");
-            exibirMensagem("Informe um CEP válido com 8 números.", "text-danger");
-            return;
-        }
+Não há banco de dados, autenticação ou API própria. A regex valida formato básico, não existência do e-mail. A senha mínima é uma regra didática, não uma política completa de segurança.
 
-        campoCep.removeClass("is-invalid");
-        exibirMensagem("Consultando CEP...", "text-secondary");
+No código registrado, a validação genérica do CEP em validation.js verifica apenas preenchimento e pode sobrepor o estado visual definido por main.js. Portanto, não há garantia de aceitar apenas CEPs consultados com sucesso. Também não há controle de respostas concorrentes da API. Essas limitações ficam registradas; não foram corrigidas silenciosamente nesta atualização.
 
-        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`)
-            .done(function (endereco) {
-                if (endereco.erro) {
-                    limparEndereco();
-                    campoCep.addClass("is-invalid");
-                    exibirMensagem("CEP não encontrado.", "text-danger");
-                    return;
-                }
+## Sequência final das 28 figuras
 
-                $("#rua").val(endereco.logradouro || "");
-                $("#bairro").val(endereco.bairro || "");
-                $("#cidade").val(endereco.localidade || "");
-                $("#estado").val(endereco.uf || "");
-                campoCep.removeClass("is-invalid").addClass("is-valid");
-                exibirMensagem("Endereço preenchido com sucesso.", "text-success");
-                $("#numero").focus();
-            })
-            .fail(function () {
-                limparEndereco();
-                exibirMensagem("Não foi possível consultar o CEP. Verifique sua conexão e tente novamente.", "text-danger");
-            });
-    }
+Esta tabela segue a numeração do relatório, não a ordem de upload das imagens na conversa.
 
-    campoCep.on("blur", consultarCep);
-    campoCep.on("input", function () {
-        let valor = $(this).val().replace(/\D/g, "");
-        if (valor.length > 5) {
-            valor = `${valor.substring(0, 5)}-${valor.substring(5, 8)}`;
-        }
-        $(this).val(valor);
-    });
-});
-```
+| Figura | Evidência |
+|---|---|
+| 1 | Seleção de projeto Java Web |
+| 2 | Estrutura do projeto de teste WebApplication1 |
+| 3 | Configuração do Tomcat |
+| 4 | Seleção Spring Web MVC |
+| 5 | redirect.jsp da aplicação de teste |
+| 6 | Aplicação de teste no navegador |
+| 7 | Criação do projeto de endereço |
+| 8 | Organização HTML/CSS/JavaScript |
+| 9 | HTML do formulário de endereço |
+| 10 | Estilos CSS e Bootstrap |
+| 11 | Consulta no controller.js |
+| 12 | Formulário de endereço no navegador |
+| 13 | Consulta de CEP válida |
+| 14 | Tratamento de CEP inválido/não localizado |
+| 15 | Nome e localização de cadastroUsuario |
+| 16 | Servidor e contexto /cadastroUsuario |
+| 17 | Spring Web MVC e biblioteca 5.3.31 |
+| 18 | Estrutura Spring e JSP inicial |
+| 19 | Bootstrap incluído no JSP |
+| 20 | Código dos 11 campos, captura refeita em 20/10 |
+| 21 | Formulário completo via Tomcat, captura refeita em 20/10 |
+| 22 | Criação de cadUsuario |
+| 23 | index.html, main.js e validation.js |
+| 24 | Bootstrap, jQuery e estrutura inicial |
+| 25 | Formulário inicial |
+| 26 | Validação de obrigatórios |
+| 27 | Endereço preenchido pelo ViaCEP |
+| 28 | Confirmação da validação |
 
-### `validation.js`
+## Relatório, aprendizado e próximos passos
 
-Usado para validar os campos obrigatórios, o e-mail por expressão regular e a senha com mínimo de seis caracteres. As classes `is-valid` e `is-invalid` permitem que o Bootstrap dê retorno visual ao usuário. O envio é simulado para o exercício: quando os dados são válidos, é mostrado o alerta `Cadastro validado com sucesso!` e o formulário é limpo.
+O relatório reúne capa, folha de rosto, sumário, introdução, quatro atividades, conclusão e referências. As adaptações de versão e de execução sem extensão foram registradas. A revisão reforçou a importância de conferir a legibilidade no PDF exportado, não apenas na captura original.
 
-```javascript
-$(document).ready(function () {
-    const formulario = $("#formCadastro");
+Competências exercitadas: configuração de servidor Java Web, organização de JSPs e configuração Spring MVC, layout com Bootstrap, requisições assíncronas, manipulação de DOM com JavaScript/jQuery, regex e validação de formulários. Trata-se de experiência acadêmica demonstrável, não de experiência profissional de emprego.
 
-    function validarEmail(email) {
-        const expressaoRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return expressaoRegular.test(email);
-    }
+Pendências para um portfólio executável:
 
-    function validarCampo(campo) {
-        const valor = campo.val().trim();
-        if (valor === "") {
-            campo.removeClass("is-valid").addClass("is-invalid");
-            return false;
-        }
-        campo.removeClass("is-invalid").addClass("is-valid");
-        return true;
-    }
+- Adicionar os projetos locais originais, configurações de build e dependências.
+- Recuperar o CSS e conferir o código original da Atividade 2.
+- Confirmar a versão exata do JDK.
+- Criar instruções de execução por projeto. A aplicação JSP precisa do ambiente Java/Tomcat.
+- Publicar capturas selecionadas apenas após revisão e autorização, sem dados pessoais.
+- Em uma evolução futura, integrar validação do CEP, tratar concorrência e implementar back-end e validação no servidor.
 
-    function validarEmailCampo() {
-        const campoEmail = $("#email");
-        const email = campoEmail.val().trim();
-        if (!validarEmail(email)) {
-            campoEmail.removeClass("is-valid").addClass("is-invalid");
-            return false;
-        }
-        campoEmail.removeClass("is-invalid").addClass("is-valid");
-        return true;
-    }
+Este commit não publica imagens, PDF, nota, RA ou outros dados acadêmicos pessoais.
 
-    function validarSenha() {
-        const campoSenha = $("#senha");
-        const senha = campoSenha.val();
-        if (senha.length < 6) {
-            campoSenha.removeClass("is-valid").addClass("is-invalid");
-            return false;
-        }
-        campoSenha.removeClass("is-invalid").addClass("is-valid");
-        return true;
-    }
+## Documentação de referência
 
-    formulario.on("submit", function (evento) {
-        evento.preventDefault();
-        let formularioValido = true;
-        const camposObrigatorios = [
-            $("#nome"), $("#sobrenome"), $("#cep"), $("#rua"),
-            $("#bairro"), $("#cidade"), $("#estado"), $("#numero")
-        ];
-
-        camposObrigatorios.forEach(function (campo) {
-            if (!validarCampo(campo)) formularioValido = false;
-        });
-
-        if (!validarEmailCampo()) formularioValido = false;
-        if (!validarSenha()) formularioValido = false;
-
-        if (formularioValido) {
-            alert("Cadastro validado com sucesso!");
-            formulario[0].reset();
-            formulario.find(".is-valid, .is-invalid").removeClass("is-valid is-invalid");
-            $("#mensagemCep").text("");
-        }
-    });
-
-    $("#nome, #sobrenome, #cep, #rua, #bairro, #cidade, #estado, #numero")
-        .on("blur", function () {
-            validarCampo($(this));
-        });
-
-    $("#email").on("blur", validarEmailCampo);
-    $("#senha").on("blur", validarSenha);
-});
-```
-
-### Teste registrado
-
-O CEP `01001-000` retornou os dados Praça da Sé, Sé, São Paulo e SP. Após o preenchimento dos campos obrigatórios com e-mail válido e senha de seis caracteres, o formulário exibiu o alerta `Cadastro validado com sucesso!`.
-
-### Limitação do exercício
-
-A atividade valida a interface e simula a conclusão do cadastro. Não há banco de dados, API própria ou persistência de dados implementada.
-
-## Próximos passos para portfólio
-
-- Conferir todos os blocos com a versão local executada no NetBeans.
-- Adicionar os arquivos originais das atividades, evitando publicar só uma transcrição em arquivo único.
-- Incluir README com objetivo, ferramentas, execução e limitações conhecidas.
-- Adicionar capturas de tela aprovadas pelo aluno, sem dados pessoais.
-- Registrar versões efetivamente utilizadas e data dos testes.
+- NetBeans 23: https://netbeans.apache.org/front/main/download/nb23/
+- Tomcat 9: https://tomcat.apache.org/tomcat-9.0-doc/
+- Spring MVC/JSP: https://docs.spring.io/spring-framework/reference/web/webmvc-view/mvc-jsp.html
+- Bootstrap: https://getbootstrap.com/docs/5.3/forms/validation/
+- jQuery: https://releases.jquery.com/jquery/
+- ViaCEP: https://viacep.com.br/
